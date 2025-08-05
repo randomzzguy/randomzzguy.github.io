@@ -1845,7 +1845,7 @@ footer {
                 <p>Tell me about your project and let's create something extraordinary together.</p>
             </div>
             
-            <form class="contact-form" id="contactForm" action="https://submit-form.com/3mdBMp8PZ" method="POST">
+            <form class="contact-form" id="contactForm" action="https://script.google.com/macros/s/AKfycbwQr9lN8tG_cQt-QPc0HOg-5vqrk6l8TCJHVU-OWjV2RrGwUm_fFbXvUYQTtbERNicW/exec" method="POST">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name" class="form-label">FULL NAME</label>
@@ -2154,9 +2154,9 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     fetch(form.action, {
         method: 'POST',
         body: data
-    }).then(response => {
-        // Formspark returns different status codes, check for both success and redirect
-        if (response.ok || response.status === 302) {
+    }).then(response => response.json())
+    .then(result => {
+        if (result.success) {
             showNotification("submit-notification");
             form.reset();
             
@@ -2176,32 +2176,14 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             submitButton.innerHTML = 'SEND MESSAGE';
             submitButton.disabled = false;
             submitButton.style.opacity = '1';
+            console.error('Form error:', result.error);
         }
-    }).catch((error) => {
-        // CORS errors from Formspark redirects are actually successful submissions
-        if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-            // Treat as success - Formspark received the data but redirect caused CORS error
-            showNotification("submit-notification");
-            form.reset();
-            
-            // Success animation
-            submitButton.innerHTML = 'SENT SUCCESSFULLY!';
-            submitButton.style.backgroundColor = '#4CAF50';
-            submitButton.style.opacity = '1';
-            
-            // Reset button after delay
-            setTimeout(() => {
-                submitButton.innerHTML = 'SEND MESSAGE';
-                submitButton.style.backgroundColor = '';
-                submitButton.disabled = false;
-            }, 3000);
-        } else {
-            // Actual network errors
-            showNotification("error-notification");
-            submitButton.innerHTML = 'SEND MESSAGE';
-            submitButton.disabled = false;
-            submitButton.style.opacity = '1';
-        }
+    }).catch(error => {
+        showNotification("error-notification");
+        submitButton.innerHTML = 'SEND MESSAGE';
+        submitButton.disabled = false;
+        submitButton.style.opacity = '1';
+        console.error('Network error:', error);
     });
 });
 // Notification
