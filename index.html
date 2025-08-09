@@ -1772,7 +1772,7 @@ footer {
                 </div>
                 <div class="contact-details">
                     <h3>Email</h3>
-                    <p>zeyad.abdelaziz98@yahoo.com</p>
+                    <p>hello@zeyad.digital</p>
                     <span class="contact-note">Response within 24 hours</span>
                 </div>
             </div>
@@ -1866,10 +1866,10 @@ footer {
                         <label for="budget" class="form-label">PROJECT BUDGET</label>
                         <select id="budget" name="budget" class="form-input">
                             <option value="">Select Budget Range</option>
-                            <option value="under-1k">Under RM1,000</option>
-                            <option value="1k-5k">RM1,000 - RM5,000</option>
-                            <option value="5k-10k">RM5,000 - RM10,000</option>
-                            <option value="10k-plus">RM10,000+</option>
+                            <option value="under-1k">Under $1,000</option>
+                            <option value="1k-5k">$1,000 - $5,000</option>
+                            <option value="5k-10k">$5,000 - $10,000</option>
+                            <option value="10k-plus">$10,000+</option>
                             <option value="discuss">Let's Discuss</option>
                         </select>
                     </div>
@@ -1997,9 +1997,9 @@ const starsContainer = document.getElementById('stars');
 for (let i = 0; i < 50; i++) {
     const star = document.createElement('div');
     star.classList.add('star');
-    star.style.left = `RM{Math.random() * 100}%`;
-    star.style.top = `RM{Math.random() * 100}%`;
-    star.style.animationDelay = `RM{Math.random() * 2}s`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.animationDelay = `${Math.random() * 2}s`;
     starsContainer.appendChild(star);
 }
 
@@ -2079,6 +2079,35 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const cursor = document.createElement('div');
 cursor.classList.add('cursor');
 document.body.appendChild(cursor);
+
+// Smooth cursor movement variables
+let mouseX = 0;
+let mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
+const cursorSpeed = 0.15;
+
+// Update mouse position on mousemove
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+// Smooth cursor animation
+function animateCursor() {
+    // Interpolate cursor position towards mouse position
+    cursorX += (mouseX - cursorX) * cursorSpeed;
+    cursorY += (mouseY - cursorY) * cursorSpeed;
+    
+    // Update cursor position
+    cursor.style.left = `${cursorX}px`;
+    cursor.style.top = `${cursorY}px`;
+    
+    requestAnimationFrame(animateCursor);
+}
+
+// Start cursor animation
+animateCursor();
 
 // Hide cursor when leaving the window
 document.addEventListener('mouseleave', () => {
@@ -2213,8 +2242,8 @@ const particlesContainer = document.getElementById('particles-container');
             
             // Random size (small)
             const size = Math.random() * 3 + 1;
-            particle.style.width = `RM{size}px`;
-            particle.style.height = `RM{size}px`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
             
             // Initial position
             resetParticle(particle);
@@ -2230,8 +2259,8 @@ const particlesContainer = document.getElementById('particles-container');
             const posX = Math.random() * 100;
             const posY = Math.random() * 100;
             
-            particle.style.left = `RM{posX}%`;
-            particle.style.top = `RM{posY}%`;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
             particle.style.opacity = '0';
             
             return {
@@ -2250,15 +2279,15 @@ const particlesContainer = document.getElementById('particles-container');
             
             // Animate with GSAP-like timing
             setTimeout(() => {
-                particle.style.transition = `all RM{duration}s linear`;
+                particle.style.transition = `all ${duration}s linear`;
                 particle.style.opacity = Math.random() * 0.5 + 0.1;
                 
                 // Move in a slight direction
                 const moveX = pos.x + (Math.random() * 20 - 10);
                 const moveY = pos.y - Math.random() * 30; // Move upwards
                 
-                particle.style.left = `RM{moveX}%`;
-                particle.style.top = `RM{moveY}%`;
+                particle.style.left = `${moveX}%`;
+                particle.style.top = `${moveY}%`;
                 
                 // Reset after animation completes
                 setTimeout(() => {
@@ -2279,12 +2308,12 @@ const particlesContainer = document.getElementById('particles-container');
             
             // Small size
             const size = Math.random() * 4 + 2;
-            particle.style.width = `RM{size}px`;
-            particle.style.height = `RM{size}px`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
             
             // Position at mouse
-            particle.style.left = `RM{mouseX}%`;
-            particle.style.top = `RM{mouseY}%`;
+            particle.style.left = `${mouseX}%`;
+            particle.style.top = `${mouseY}%`;
             particle.style.opacity = '0.6';
             
             particlesContainer.appendChild(particle);
@@ -2292,8 +2321,8 @@ const particlesContainer = document.getElementById('particles-container');
             // Animate outward
             setTimeout(() => {
                 particle.style.transition = 'all 2s ease-out';
-                particle.style.left = `RM{mouseX + (Math.random() * 10 - 5)}%`;
-                particle.style.top = `RM{mouseY + (Math.random() * 10 - 5)}%`;
+                particle.style.left = `${mouseX + (Math.random() * 10 - 5)}%`;
+                particle.style.top = `${mouseY + (Math.random() * 10 - 5)}%`;
                 particle.style.opacity = '0';
                 
                 // Remove after animation
@@ -2309,7 +2338,7 @@ const particlesContainer = document.getElementById('particles-container');
             
             spheres.forEach((sphere, index) => {
                 const multiplier = (index + 1) * 0.5;
-                sphere.style.transform = `translate(RM{moveX * multiplier}px, RM{moveY * multiplier}px)`;
+                sphere.style.transform = `translate(${moveX * multiplier}px, ${moveY * multiplier}px)`;
             });
             
             // Parallax effect for tech grid
@@ -2317,7 +2346,7 @@ const particlesContainer = document.getElementById('particles-container');
             if (techGrid) {
                 const parallaxX = moveX * 0.2;
                 const parallaxY = moveY * 0.2;
-                techGrid.style.transform = `translate(RM{parallaxX}px, RM{parallaxY}px)`;
+                techGrid.style.transform = `translate(${parallaxX}px, ${parallaxY}px)`;
             }
             
             // Interactive glow effect
@@ -2325,8 +2354,8 @@ const particlesContainer = document.getElementById('particles-container');
             if (glow) {
                 const glowX = (e.clientX / window.innerWidth) * 100;
                 const glowY = (e.clientY / window.innerHeight) * 100;
-                glow.style.left = `RM{glowX}%`;
-                glow.style.top = `RM{glowY}%`;
+                glow.style.left = `${glowX}%`;
+                glow.style.top = `${glowY}%`;
             }
         });
 </script>
