@@ -489,19 +489,17 @@ nav {
 .about-image {
     flex: 1;
     min-width: 300px;
-    height: 300px;
-    position: relative;
-    border: 2px solid var(--deep-plum);
-    overflow: hidden;
-}
-
-.about-avatar {
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(74, 38, 115, 0.2);
+}
+
+.about-avatar {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Skills Section */
@@ -1543,13 +1541,7 @@ footer {
         </div>
         <div class="about-image">
             <div class="about-avatar">
-                <svg width="200" height="200" viewBox="0 0 200 200">
-                    <circle cx="100" cy="50" r="50" fill="#4A2673" opacity="0.8" />
-                    <rect x="50" y="120" width="100" height="50" fill="#D94F46" opacity="0.8" />
-                    <circle cx="75" cy="60" r="10" fill="#ECE9E2" />
-                    <circle cx="125" cy="60" r="10" fill="#ECE9E2" />
-                    <path d="M50 90 Q100 110 130 90" stroke="#ECE9E2" stroke-width="3" fill="none" />
-                </svg>
+                <img src="assets/pp2.png" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);">
             </div>
         </div>
     </div>
@@ -2062,8 +2054,8 @@ function animateCursor() {
     cursorY += (mouseY - cursorY) * cursorSpeed;
     
     // Update cursor position
-    cursor.style.left = `RM{cursorX}px`;
-    cursor.style.top = `RM{cursorY}px`;
+    cursor.style.left = `${cursorX}px`;
+    cursor.style.top = `${cursorY}px`;
     
     requestAnimationFrame(animateCursor);
 }
@@ -2204,8 +2196,8 @@ const particlesContainer = document.getElementById('particles-container');
             
             // Random size (small)
             const size = Math.random() * 3 + 1;
-            particle.style.width = `RM{size}px`;
-            particle.style.height = `RM{size}px`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
             
             // Initial position
             resetParticle(particle);
@@ -2221,8 +2213,8 @@ const particlesContainer = document.getElementById('particles-container');
             const posX = Math.random() * 100;
             const posY = Math.random() * 100;
             
-            particle.style.left = `RM{posX}%`;
-            particle.style.top = `RM{posY}%`;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
             particle.style.opacity = '0';
             
             return {
@@ -2241,15 +2233,15 @@ const particlesContainer = document.getElementById('particles-container');
             
             // Animate with GSAP-like timing
             setTimeout(() => {
-                particle.style.transition = `all RM{duration}s linear`;
+                particle.style.transition = `all ${duration}s linear`;
                 particle.style.opacity = Math.random() * 0.5 + 0.1;
                 
                 // Move in a slight direction
                 const moveX = pos.x + (Math.random() * 20 - 10);
                 const moveY = pos.y - Math.random() * 30; // Move upwards
                 
-                particle.style.left = `RM{moveX}%`;
-                particle.style.top = `RM{moveY}%`;
+                particle.style.left = `${moveX}%`;
+                particle.style.top = `${moveY}%`;
                 
                 // Reset after animation completes
                 setTimeout(() => {
@@ -2270,12 +2262,12 @@ const particlesContainer = document.getElementById('particles-container');
             
             // Small size
             const size = Math.random() * 4 + 2;
-            particle.style.width = `RM{size}px`;
-            particle.style.height = `RM{size}px`;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
             
             // Position at mouse
-            particle.style.left = `RM{mouseX}%`;
-            particle.style.top = `RM{mouseY}%`;
+            particle.style.left = `${mouseX}%`;
+            particle.style.top = `${mouseY}%`;
             particle.style.opacity = '0.6';
             
             particlesContainer.appendChild(particle);
@@ -2283,8 +2275,8 @@ const particlesContainer = document.getElementById('particles-container');
             // Animate outward
             setTimeout(() => {
                 particle.style.transition = 'all 2s ease-out';
-                particle.style.left = `RM{mouseX + (Math.random() * 10 - 5)}%`;
-                particle.style.top = `RM{mouseY + (Math.random() * 10 - 5)}%`;
+                particle.style.left = `${mouseX + (Math.random() * 10 - 5)}%`;
+                particle.style.top = `${mouseY + (Math.random() * 10 - 5)}%`;
                 particle.style.opacity = '0';
                 
                 // Remove after animation
@@ -2300,7 +2292,7 @@ const particlesContainer = document.getElementById('particles-container');
             
             spheres.forEach((sphere, index) => {
                 const multiplier = (index + 1) * 0.5;
-                sphere.style.transform = `translate(RM{moveX * multiplier}px, RM{moveY * multiplier}px)`;
+                sphere.style.transform = `translate(${moveX * multiplier}px, ${moveY * multiplier}px)`;
             });
             
             // Parallax effect for tech grid
@@ -2308,7 +2300,7 @@ const particlesContainer = document.getElementById('particles-container');
             if (techGrid) {
                 const parallaxX = moveX * 0.2;
                 const parallaxY = moveY * 0.2;
-                techGrid.style.transform = `translate(RM{parallaxX}px, RM{parallaxY}px)`;
+                techGrid.style.transform = `translate(${parallaxX}px, ${parallaxY}px)`;
             }
             
             // Interactive glow effect
@@ -2316,8 +2308,8 @@ const particlesContainer = document.getElementById('particles-container');
             if (glow) {
                 const glowX = (e.clientX / window.innerWidth) * 100;
                 const glowY = (e.clientY / window.innerHeight) * 100;
-                glow.style.left = `RM{glowX}%`;
-                glow.style.top = `RM{glowY}%`;
+                glow.style.left = `${glowX}%`;
+                glow.style.top = `${glowY}%`;
             }
         });
 </script>
