@@ -140,6 +140,35 @@ a, button, input, textarea {
             75% { transform: translate(5px, -10px); }
             100% { transform: translate(0, 0); }
         }
+        
+        /* Mobile Performance Optimizations */
+        @media (max-width: 768px) {
+            .noise-overlay {
+                animation: none; /* Disable grain animation on mobile */
+                opacity: 0.03; /* Reduce opacity */
+            }
+            
+            .gradient-sphere {
+                animation-duration: 25s; /* Slower animations */
+            }
+            
+            .glow {
+                animation-duration: 12s; /* Slower pulse */
+                filter: blur(20px); /* Reduce blur intensity */
+            }
+            
+            .hero img {
+                animation: none; /* Disable logo animations */
+            }
+            
+            .skill-card, .project-card {
+                transition: transform 0.2s ease; /* Faster transitions */
+            }
+            
+            .scroll-progress-bar {
+                animation: none; /* Disable shimmer on mobile */
+            }
+        }
 
         @keyframes float-1 {
             0% {
@@ -436,6 +465,7 @@ nav {
 .hero img {
     width: 400px;
     height: 400px;
+    margin-top: 100px;
     margin-bottom: 40px;
     animation: neon-glow 3s infinite alternate, float-gentle 6s ease-in-out infinite;
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1757,8 +1787,6 @@ footer {
     <button class="cta-button">VIEW MY WORK</button>
 </div>
 <div class="tech-grid">
-    <div class="tech-line horizontal-line" style="top: 30%"></div>
-    <div class="tech-line horizontal-line" style="top: 50%"></div>
     <div class="tech-line vertical-line" style="left: 30%"></div>
     <div class="tech-line vertical-line" style="left: 50%"></div>
     <div class="tech-circle" style="width: 150px; height: 150px; top: 20%; left: 50%"></div>
@@ -2175,6 +2203,31 @@ window.addEventListener('load', function() {
                     section.style.transform = 'translateY(0)';
                 }, index * 200);
             });
+        
+        // Cleanup function to prevent memory leaks
+        function cleanup() {
+            // Remove scroll event listeners
+            window.removeEventListener('scroll', checkFade);
+            
+            // Clear any running timeouts/intervals
+            if (window.particleTimeouts) {
+                window.particleTimeouts.forEach(timeout => clearTimeout(timeout));
+                window.particleTimeouts = [];
+            }
+            
+            // Remove particles container to free memory
+            const particlesContainer = document.getElementById('particles-container');
+            if (particlesContainer) {
+                particlesContainer.innerHTML = '';
+            }
+        }
+        
+        // Add cleanup on page unload
+        window.addEventListener('beforeunload', cleanup);
+        window.addEventListener('pagehide', cleanup);
+        
+        // Initialize particle timeouts array
+        window.particleTimeouts = [];
         }, 800);
     }, 2000);
 });
@@ -2266,60 +2319,70 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
-// Create the custom cursor element
-const cursor = document.createElement('div');
-cursor.classList.add('cursor');
-document.body.appendChild(cursor);
+// Create the custom cursor element - Optimized for performance
+const isMobileForCursor = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// Smooth cursor movement variables
-let mouseX = 0;
-let mouseY = 0;
-let cursorX = 0;
-let cursorY = 0;
-const cursorSpeed = 0.15;
-
-// Update mouse position on mousemove
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-// Smooth cursor animation
-function animateCursor() {
-    // Interpolate cursor position towards mouse position
-    cursorX += (mouseX - cursorX) * cursorSpeed;
-    cursorY += (mouseY - cursorY) * cursorSpeed;
+if (!isMobileForCursor) {
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
     
-    // Update cursor position
-    cursor.style.left = `${cursorX}px`;
-    cursor.style.top = `${cursorY}px`;
+    // Smooth cursor movement variables
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    const cursorSpeed = 0.15;
+    let lastCursorUpdate = 0;
     
-    requestAnimationFrame(animateCursor);
+    // Update mouse position on mousemove with throttling
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    // Smooth cursor animation with frame limiting
+    function animateCursor() {
+        const now = Date.now();
+        if (now - lastCursorUpdate > 16) { // Limit to ~60fps
+            // Interpolate cursor position towards mouse position
+            cursorX += (mouseX - cursorX) * cursorSpeed;
+            cursorY += (mouseY - cursorY) * cursorSpeed;
+            
+            // Update cursor position
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+            
+            lastCursorUpdate = now;
+        }
+        
+        requestAnimationFrame(animateCursor);
+    }
+    
+    // Start cursor animation
+    animateCursor();
+    
+    // Hide cursor when leaving the window
+    document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+    });
+    
+    // Show cursor when entering the window
+    document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1';
+    });
+    
+    // Enhanced cursor interactions
+    document.querySelectorAll('a, button, input, textarea, .skill-card, .project-card').forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+        });
+    });
 }
-
-// Start cursor animation
-animateCursor();
-
-// Hide cursor when leaving the window
-document.addEventListener('mouseleave', () => {
-    cursor.style.opacity = '0';
-});
-
-// Show cursor when entering the window
-document.addEventListener('mouseenter', () => {
-    cursor.style.opacity = '1';
-});
-
-// Enhanced cursor interactions
-document.querySelectorAll('a, button, input, textarea, .skill-card, .project-card').forEach(element => {
-    element.addEventListener('mouseenter', () => {
-        cursor.classList.add('hover');
-    });
-    
-    element.addEventListener('mouseleave', () => {
-        cursor.classList.remove('hover');
-    });
-});
 
 // Header scroll effect
 window.addEventListener('scroll', () => {
@@ -2446,11 +2509,19 @@ document.querySelectorAll('.project-card').forEach(card => {
     });
 });
 
-// Particle Animation
+// Particle Animation - Optimized for performance
 function initParticles() {
+    // Disable particles on mobile devices to prevent overheating
+    const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        return; // Skip particle initialization on mobile
+    }
+    
     const particlesContainer = document.getElementById('particles-container');
     if (particlesContainer) {
-        const particleCount = 50;
+        // Reduced particle count for better performance
+        const particleCount = 20;
         
         // Create particles
         for (let i = 0; i < particleCount; i++) {
@@ -2511,7 +2582,7 @@ if (document.readyState === 'loading') {
             const delay = Math.random() * 5;
             
             // Animate with GSAP-like timing
-            setTimeout(() => {
+            const delayTimeout = setTimeout(() => {
                 particle.style.transition = `all ${duration}s linear`;
                 particle.style.opacity = Math.random() * 0.5 + 0.1;
                 
@@ -2523,77 +2594,86 @@ if (document.readyState === 'loading') {
                 particle.style.top = `${moveY}%`;
                 
                 // Reset after animation completes
-                setTimeout(() => {
+                const animationTimeout = setTimeout(() => {
                     animateParticle(particle);
                 }, duration * 1000);
+                
+                // Track timeout for cleanup
+                if (window.particleTimeouts) {
+                    window.particleTimeouts.push(animationTimeout);
+                }
             }, delay * 1000);
+            
+            // Track timeout for cleanup
+            if (window.particleTimeouts) {
+                window.particleTimeouts.push(delayTimeout);
+            }
         }
         
-        // Mouse interaction
-        document.addEventListener('mousemove', (e) => {
-            // Create particles at mouse position
-            const mouseX = (e.clientX / window.innerWidth) * 100;
-            const mouseY = (e.clientY / window.innerHeight) * 100;
-            
-            // Create temporary particle
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            
-            // Small size
-            const size = Math.random() * 4 + 2;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            // Position at mouse
-            particle.style.left = `${mouseX}%`;
-            particle.style.top = `${mouseY}%`;
-            particle.style.opacity = '0.6';
-            
-            const container = document.getElementById('particles-container');
-            if (container) {
-                container.appendChild(particle);
-            }
-            
-            // Animate outward
-            setTimeout(() => {
-                particle.style.transition = 'all 2s ease-out';
-                particle.style.left = `${mouseX + (Math.random() * 10 - 5)}%`;
-                particle.style.top = `${mouseY + (Math.random() * 10 - 5)}%`;
-                particle.style.opacity = '0';
+        // Mouse interaction - Optimized with throttling and mobile detection
+        let lastMouseMove = 0;
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                // Throttle mouse events to reduce CPU usage
+                const now = Date.now();
+                if (now - lastMouseMove < 50) return; // Limit to 20fps
+                lastMouseMove = now;
                 
-                // Remove after animation
-                setTimeout(() => {
-                    particle.remove();
-                }, 2000);
-            }, 10);
-            
-            // Enhanced movement of gradient spheres with parallax
-            const spheres = document.querySelectorAll('.gradient-sphere');
-            const moveX = (e.clientX / window.innerWidth - 0.5) * 10;
-            const moveY = (e.clientY / window.innerHeight - 0.5) * 10;
-            
-            spheres.forEach((sphere, index) => {
-                const multiplier = (index + 1) * 0.5;
-                sphere.style.transform = `translate(${moveX * multiplier}px, ${moveY * multiplier}px)`;
+                const mouseX = (e.clientX / window.innerWidth) * 100;
+                const mouseY = (e.clientY / window.innerHeight) * 100;
+                
+                // Reduced mouse particle creation frequency
+                if (Math.random() > 0.7) { // Only create particles 30% of the time
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    const size = Math.random() * 3 + 1; // Smaller particles
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${mouseX}%`;
+                    particle.style.top = `${mouseY}%`;
+                    particle.style.opacity = '0.4';
+                    
+                    const container = document.getElementById('particles-container');
+                    if (container) {
+                        container.appendChild(particle);
+                        
+                        // Shorter animation duration
+                        const mouseTimeout1 = setTimeout(() => {
+                            particle.style.transition = 'all 1s ease-out';
+                            particle.style.left = `${mouseX + (Math.random() * 6 - 3)}%`;
+                            particle.style.top = `${mouseY + (Math.random() * 6 - 3)}%`;
+                            particle.style.opacity = '0';
+                            
+                            const mouseTimeout2 = setTimeout(() => particle.remove(), 1000);
+                            
+                            // Track timeout for cleanup
+                            if (window.particleTimeouts) {
+                                window.particleTimeouts.push(mouseTimeout2);
+                            }
+                        }, 10);
+                        
+                        // Track timeout for cleanup
+                        if (window.particleTimeouts) {
+                            window.particleTimeouts.push(mouseTimeout1);
+                        }
+                    }
+                }
+                
+                // Reduced parallax effects
+                const moveX = (e.clientX / window.innerWidth - 0.5) * 5; // Reduced intensity
+                const moveY = (e.clientY / window.innerHeight - 0.5) * 5;
+                
+                // Only apply to gradient spheres, remove other parallax effects
+                const spheres = document.querySelectorAll('.gradient-sphere');
+                spheres.forEach((sphere, index) => {
+                    const multiplier = (index + 1) * 0.2; // Reduced multiplier
+                    sphere.style.transform = `translate(${moveX * multiplier}px, ${moveY * multiplier}px)`;
+                });
             });
-            
-            // Parallax effect for tech grid
-            const techGrid = document.querySelector('.tech-grid');
-            if (techGrid) {
-                const parallaxX = moveX * 0.2;
-                const parallaxY = moveY * 0.2;
-                techGrid.style.transform = `translate(${parallaxX}px, ${parallaxY}px)`;
-            }
-            
-            // Interactive glow effect
-            const glow = document.querySelector('.glow');
-            if (glow) {
-                const glowX = (e.clientX / window.innerWidth) * 100;
-                const glowY = (e.clientY / window.innerHeight) * 100;
-                glow.style.left = `${glowX}%`;
-                glow.style.top = `${glowY}%`;
-            }
-        });
+        }
 </script>
 </body>
 </html>
