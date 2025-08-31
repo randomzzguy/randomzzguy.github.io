@@ -291,6 +291,81 @@ nav {
     flex: 1; /* Allow the nav to take up remaining space */
 }
 
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+    position: relative;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--soft-ivory);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile Navigation */
+.nav-mobile {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(42, 46, 51, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.nav-mobile.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.nav-mobile .nav-list {
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+}
+
+.nav-mobile .nav-link {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-mobile .nav-link:hover {
+    border-color: var(--burnt-coral);
+    background: rgba(217, 79, 50, 0.1);
+    transform: scale(1.05);
+}
+
 .nav-item {
     position: relative;
 }
@@ -1281,13 +1356,155 @@ footer {
         font-size: 1rem;
     }
     
-    .nav-list {
-        flex-direction: column;
-        align-items: center;
+    /* Hide desktop navigation */
+    nav {
+        display: none;
+    }
+    
+    /* Show hamburger menu */
+    .hamburger {
+        display: flex;
+    }
+    
+    /* Show mobile navigation */
+    .nav-mobile {
+        display: flex;
     }
     
     .about-content {
         flex-direction: column;
+    }
+    
+    /* Header adjustments */
+    header {
+        padding: 20px 0;
+    }
+    
+    header .container {
+        padding: 0 20px;
+    }
+    
+    .logoTop {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+    }
+    
+    /* Hero section mobile */
+    .hero {
+        height: 60vh;
+        padding: 0 20px;
+    }
+    
+    .hero img {
+        width: 250px;
+        height: 250px;
+    }
+    
+    /* About section mobile */
+    .about {
+        padding: 60px 20px;
+    }
+    
+    .about-image {
+        min-width: 250px;
+        margin-bottom: 30px;
+    }
+    
+    .about-avatar {
+        width: 250px;
+        height: 250px;
+    }
+    
+    /* Skills section mobile */
+    .skills {
+        padding: 60px 20px;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    /* Projects section mobile */
+    .projects {
+        padding: 60px 20px;
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    /* Contact section mobile */
+     .contact {
+         padding: 60px 20px;
+     }
+ }
+
+/* Additional mobile optimizations for smaller screens */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+    
+    .logoTop {
+        font-size: 1.3rem;
+    }
+    
+    .hero {
+        height: 50vh;
+        padding: 0 15px;
+    }
+    
+    .hero img {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
+    }
+    
+    .about {
+        padding: 40px 15px;
+    }
+    
+    .about-avatar {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .skills, .projects, .contact {
+        padding: 40px 15px;
+    }
+    
+    .skill-card, .project-card {
+        padding: 20px 15px;
+    }
+    
+    .skill-title {
+        font-size: 1rem;
+    }
+    
+    .project-title {
+        font-size: 1.1rem;
+    }
+    
+    .nav-mobile .nav-link {
+        font-size: 1.3rem;
+        padding: 12px 25px;
+    }
+    
+    .hamburger span {
+        width: 22px;
+        height: 2px;
     }
 }
 
@@ -1509,8 +1726,25 @@ footer {
             <li class="nav-item"><a href="#contact" class="nav-link">CONTACT</a></li>
         </ul>
     </nav>
+    <!-- Hamburger Menu -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 </div>
 </header>
+
+<!-- Mobile Navigation Overlay -->
+<div class="nav-mobile" id="navMobile">
+    <ul class="nav-list">
+        <li class="nav-item"><a href="#home" class="nav-link mobile-nav-link">HOME</a></li>
+        <li class="nav-item"><a href="#about" class="nav-link mobile-nav-link">ABOUT</a></li>
+        <li class="nav-item"><a href="#skills" class="nav-link mobile-nav-link">SKILLS</a></li>
+        <li class="nav-item"><a href="#projects" class="nav-link mobile-nav-link">PROJECTS</a></li>
+        <li class="nav-item"><a href="#contact" class="nav-link mobile-nav-link">CONTACT</a></li>
+    </ul>
+</div>
 
 <!-- Hero Section -->
 <section class="hero" id="home">
@@ -2093,6 +2327,35 @@ window.addEventListener('scroll', () => {
         header.classList.remove('scrolled');
     }
 });
+
+// Hamburger menu functionality
+const hamburger = document.getElementById('hamburger');
+const navMobile = document.getElementById('navMobile');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMobile.classList.toggle('active');
+    document.body.style.overflow = navMobile.classList.contains('active') ? 'hidden' : 'auto';
+});
+
+// Close mobile menu when clicking on a link
+mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMobile.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+});
+
+// Close mobile menu when clicking outside
+navMobile.addEventListener('click', (e) => {
+    if (e.target === navMobile) {
+        hamburger.classList.remove('active');
+        navMobile.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+});
 // Form submission with enhanced feedback
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -2181,16 +2444,29 @@ document.querySelectorAll('.project-card').forEach(card => {
 });
 
 // Particle Animation
-
-const particlesContainer = document.getElementById('particles-container');
+function initParticles() {
+    const particlesContainer = document.getElementById('particles-container');
+    if (particlesContainer) {
         const particleCount = 50;
         
         // Create particles
         for (let i = 0; i < particleCount; i++) {
             createParticle();
         }
+    }
+}
+
+// Initialize particles when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initParticles);
+} else {
+    initParticles();
+}
         
         function createParticle() {
+            const container = document.getElementById('particles-container');
+            if (!container) return;
+            
             const particle = document.createElement('div');
             particle.className = 'particle';
             
@@ -2202,7 +2478,7 @@ const particlesContainer = document.getElementById('particles-container');
             // Initial position
             resetParticle(particle);
             
-            particlesContainer.appendChild(particle);
+            container.appendChild(particle);
             
             // Animate
             animateParticle(particle);
@@ -2270,7 +2546,10 @@ const particlesContainer = document.getElementById('particles-container');
             particle.style.top = `${mouseY}%`;
             particle.style.opacity = '0.6';
             
-            particlesContainer.appendChild(particle);
+            const container = document.getElementById('particles-container');
+            if (container) {
+                container.appendChild(particle);
+            }
             
             // Animate outward
             setTimeout(() => {
