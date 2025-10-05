@@ -49,7 +49,11 @@ a, button, input, textarea {
     border-radius: 2px;
     pointer-events: none;
     z-index: 10000;
-    transform: translate(-50%, -50%);
+    left: 0;
+    top: 0;
+    opacity: 1;
+    transform: translate(-50%, -50%) translateZ(0);
+    will-change: transform, left, top;
     transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, border-radius 0.2s ease;
 }
 
@@ -2327,40 +2331,11 @@ if (!isMobileForCursor) {
     cursor.classList.add('cursor');
     document.body.appendChild(cursor);
     
-    // Smooth cursor movement variables
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-    const cursorSpeed = 0.15;
-    let lastCursorUpdate = 0;
-    
-    // Update mouse position on mousemove with throttling
+    // Instant cursor movement using transform (no layout thrash)
     document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        cursor.style.transform = `translate(-50%, -50%) translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        cursor.style.opacity = '1';
     });
-    
-    // Smooth cursor animation with frame limiting
-    function animateCursor() {
-        const now = Date.now();
-        if (now - lastCursorUpdate > 16) { // Limit to ~60fps
-            // Interpolate cursor position towards mouse position
-            cursorX += (mouseX - cursorX) * cursorSpeed;
-            cursorY += (mouseY - cursorY) * cursorSpeed;
-            
-            // Update cursor position
-            cursor.style.left = `${cursorX}px`;
-            cursor.style.top = `${cursorY}px`;
-            
-            lastCursorUpdate = now;
-        }
-        
-        requestAnimationFrame(animateCursor);
-    }
-    
-    // Start cursor animation
-    animateCursor();
     
     // Hide cursor when leaving the window
     document.addEventListener('mouseleave', () => {
