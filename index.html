@@ -1,15 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-    <link rel="icon" href="assets/favicon.ico">
-    <link rel="manifest" href="assets/site.webmanifest">
-    <title>Zeyad.Design</title>
-    <style>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeyad - Particle Universe</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
         :root {
             --dark-slate: #2A2E33;
             --soft-ivory: #ECE9E2;
@@ -17,230 +13,699 @@
             --burnt-coral: #D94F46;
             --muted-gold: #BFA55A;
         }
-
-        /* Global */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background-color: var(--dark-slate);
-            color: var(--soft-ivory);
-            font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        /* Animated Background */
-        .gradient-background {
-            background-size: cover;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             height: 100%;
-            z-index: -1;
-            overflow: hidden;
+            font-family: 'Inter', -webkit-system-font, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #2A2E33;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
         }
 
+        html { height: 100%; }
+
+        /* Animated Background (remembered) */
+        .gradient-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
         .gradient-sphere { position: absolute; border-radius: 50%; filter: blur(40px); }
-        .sphere-1 {
-            width: 40vw; height: 40vw;
-            background: linear-gradient(40deg, rgba(74,38,115,0.8), rgba(147,90,212,0.4));
-            top: -10%; left: -10%;
-            animation: float-1 15s ease-in-out infinite alternate;
-        }
-        .sphere-2 {
-            width: 45vw; height: 45vw;
-            background: linear-gradient(240deg, rgba(217,79,50,0.8), rgba(255,146,139,0.4));
-            bottom: -20%; right: -10%;
-            animation: float-2 18s ease-in-out infinite alternate;
-        }
-        .sphere-3 {
-            width: 30vw; height: 30vw;
-            background: linear-gradient(120deg, rgba(191,165,90,0.5), rgba(245,224,161,0.5));
-            top: 60%; left: 20%;
-            animation: float-3 20s ease-in-out infinite alternate;
-        }
-
-        .grid-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-size: 40px 40px;
-            background-image:
-                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-            z-index: 2;
-        }
-
-        .glow {
-            position: absolute; width: 40vw; height: 40vh;
-            background: radial-gradient(circle, rgba(72,0,255,0.15), transparent 50%);
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 3; animation: pulse 8s infinite alternate; filter: blur(30px);
-        }
-
-        .noise-overlay {
-            background-size: 200px 200px;
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.08; z-index: 5;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            animation: grain-shift 8s infinite linear;
-        }
-
-        .particles-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
-        .particle { position: absolute; background: white; border-radius: 50%; opacity: 0; pointer-events: none; }
-
+        .sphere-1 { width: 40vw; height: 40vw; background: linear-gradient(40deg, rgba(74,38,115,0.8), rgba(147,90,212,0.4)); top: -10%; left: -10%; animation: float-1 15s ease-in-out infinite alternate; }
+        .sphere-2 { width: 45vw; height: 45vw; background: linear-gradient(240deg, rgba(217,79,50,0.8), rgba(255,146,139,0.4)); bottom: -20%; right: -10%; animation: float-2 18s ease-in-out infinite alternate; }
+        .sphere-3 { width: 30vw; height: 30vw; background: linear-gradient(120deg, rgba(191,165,90,0.5), rgba(245,224,161,0.5)); top: 60%; left: 20%; animation: float-3 20s ease-in-out infinite alternate; }
+        .grid-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: 40px 40px; background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); z-index: 1; }
+        .glow { position: absolute; width: 40vw; height: 40vh; background: radial-gradient(circle, rgba(72,0,255,0.15), transparent 50%); top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; animation: pulse 8s infinite alternate; filter: blur(30px); }
+        .noise-overlay { background-size: 200px 200px; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.08; z-index: 1; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); animation: grain-shift 8s infinite linear; }
         @keyframes grain-shift { 0% { transform: translate(0,0);} 25% { transform: translate(-5px,-5px);} 50% { transform: translate(-10px,5px);} 75% { transform: translate(5px,-10px);} 100% { transform: translate(0,0);} }
         @keyframes pulse { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9);} 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1);} }
         @keyframes float-1 { 0% { transform: translate(0,0) scale(1);} 100% { transform: translate(10%,10%) scale(1.1);} }
         @keyframes float-2 { 0% { transform: translate(0,0) scale(1);} 100% { transform: translate(-10%,-5%) scale(1.15);} }
         @keyframes float-3 { 0% { transform: translate(0,0) scale(1); opacity: 0.5;} 100% { transform: translate(-5%,10%) scale(1.05); opacity: 0.6;} }
-
-        /* Mobile performance tweaks */
-        @media (max-width: 768px) {
-            .noise-overlay { animation: none; opacity: 0.03; }
-            .gradient-sphere { animation-duration: 25s; }
-            .glow { animation-duration: 12s; filter: blur(20px); }
-        }
-
-        /* Remodel message */
-        .remodel-message {
+        @media (max-width: 768px) { .noise-overlay { animation: none; opacity: 0.03; } .gradient-sphere { animation-duration: 25s; } .glow { animation-duration: 12s; filter: blur(20px); } }
+        /* Particle Canvas */
+        #particleCanvas {
             position: fixed;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 10;
-            background: rgba(42, 46, 51, 0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            padding: 24px 28px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Main Container */
+        .universe-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 2rem;
+            padding-top: 2.5rem;
+            z-index: 2;
+            perspective: 1500px;
+        }
+
+        /* Floating Identity Card */
+        .identity-sphere {
+            width: 360px;
+            height: 560px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float-rotate 20s ease-in-out infinite;
+        }
+
+        .identity-sphere.hover-stable { animation: none; transform: rotateY(0deg) rotateX(0deg) translateY(0) translateZ(0); }
+
+        @keyframes float-rotate {
+            0%, 100% { 
+                transform: rotateY(-10deg) rotateX(5deg) translateY(0px) translateZ(0px);
+            }
+            25% { 
+                transform: rotateY(5deg) rotateX(-3deg) translateY(-15px) translateZ(20px);
+            }
+            50% { 
+                transform: rotateY(10deg) rotateX(8deg) translateY(-5px) translateZ(-10px);
+            }
+            75% { 
+                transform: rotateY(-5deg) rotateX(-5deg) translateY(-20px) translateZ(15px);
+            }
+        }
+
+        .glass-card {
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(120% 80% at 30% 20%, rgba(255,255,255,0.08), transparent 60%),
+                conic-gradient(from 25deg at 50% 50%, rgba(236,233,226,0.06), rgba(191,165,90,0.05), rgba(236,233,226,0.06)),
+                linear-gradient(145deg, rgba(60,60,65,0.7), rgba(28,28,32,0.7));
+            backdrop-filter: blur(25px);
+            border: 1.3px solid rgba(191, 165, 90, 0.24);
+            border-radius: 30px;
+            padding: 2rem;
+            position: relative;
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, 0.35),
+                0 15px 50px rgba(74, 38, 115, 0.22),
+                inset 0 2px 0 rgba(236, 233, 226, 0.08),
+                inset 0 -2px 0 rgba(74, 38, 115, 0.12);
+            transition: transform 280ms ease, filter 280ms ease, box-shadow 280ms ease, border-color 280ms ease;
+            will-change: transform, filter;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .glass-card.is-hovered {
+            transform: translateY(-10px) scale(1.02);
+            filter: brightness(1.08) contrast(1.05);
+            box-shadow:
+                0 50px 150px rgba(0, 0, 0, 0.4),
+                0 25px 80px rgba(74, 38, 115, 0.3),
+                inset 0 3px 0 rgba(236, 233, 226, 0.15),
+                inset 0 -3px 0 rgba(74, 38, 115, 0.15);
+            border-color: rgb(217, 79, 70, 0.5);
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 25px;
+            pointer-events: none;
+            background-image:
+                repeating-linear-gradient(12deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 3px),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+                radial-gradient(ellipse at center, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.18) 40%, transparent 62%);
+            background-size: auto, 240px 240px, 64% 82%;
+            background-repeat: repeat, repeat, no-repeat;
+            background-position: 0 0, 0 0, var(--sheen-pos-x, 50%) var(--sheen-pos-y, 50%);
+            mix-blend-mode: overlay;
+            opacity: 0.05;
+            transform: scale(0.98);
+        }
+
+        .glass-card.is-hovered::after { opacity: 0.28; transform: scale(1); transition: opacity 600ms ease, transform 600ms ease; }
+        .glass-card.is-leaving::after { opacity: 0.05; transform: scale(0.98); transition: opacity 400ms ease, transform 400ms ease; }
+
+        /* removed keyframes in favor of transitions to prevent replays */
+
+
+        /* Identity Header */
+        .identity-header {
             text-align: center;
-            max-width: 720px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            position: relative;
         }
-        .remodel-message p { font-size: 1.15rem; }
-        .remodel-message a { color: var(--burnt-coral); text-decoration: underline; }
-        .remodel-message a:focus { outline: 2px dashed var(--muted-gold); outline-offset: 4px; }
+
+        .name-logo {
+            display: inline-block;
+            width: clamp(160px, 30vw, 240px);
+            height: auto;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 6px rgba(191,165,90,0.35)) drop-shadow(0 0 14px rgba(191,165,90,0.25)) drop-shadow(0 0 22px rgba(191,165,90,0.15));
+            animation: logo-neon-glow 6s ease-in-out infinite;
+            will-change: filter;
+        }
+
+        @keyframes logo-neon-glow { 
+            0% { filter: drop-shadow(0 0 6px #D94F46) drop-shadow(0 0 14px #D94F46) drop-shadow(0 0 22px rgba(217,79,70,0.35)); }
+            25% { filter: drop-shadow(0 0 6px #4A2673) drop-shadow(0 0 14px #4A2673) drop-shadow(0 0 22px rgba(74,38,115,0.35)); }
+            50% { filter: drop-shadow(0 0 6px #BFA55A) drop-shadow(0 0 14px #BFA55A) drop-shadow(0 0 22px rgba(191,165,90,0.35)); }
+            75% { filter: drop-shadow(0 0 6px #4A2673) drop-shadow(0 0 14px #4A2673) drop-shadow(0 0 22px rgba(74,38,115,0.35)); }
+            100% { filter: drop-shadow(0 0 6px #D94F46) drop-shadow(0 0 14px #D94F46) drop-shadow(0 0 22px rgba(217,79,70,0.35)); }
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            letter-spacing: 0.47em;
+        }
+
+        /* Floating Orbs */
+        .floating-orb {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(236,233,226,0.9), transparent);
+            border-radius: 50%;
+            animation: orb-float 6s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            top: 20%;
+            left: -10px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            top: 60%;
+            right: -10px;
+            animation-delay: -2s;
+        }
+
+        .orb-3 {
+            bottom: 30%;
+            left: -5px;
+            animation-delay: -4s;
+        }
+
+        @keyframes orb-float {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.6;
+            }
+            33% { 
+                transform: translateY(-20px) translateX(15px);
+                opacity: 1;
+            }
+            66% { 
+                transform: translateY(10px) translateX(-10px);
+                opacity: 0.8;
+            }
+        }
+
+        /* Action Buttons */
+        .action-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 1.5rem 1.5rem;
+        }
+        .cosmic-button .button-subtext {
+            display: block;
+            margin-top: 0.15rem;
+            font-size: 0.1rem;
+            color: #D94F46;
+            opacity: 0.95;
+            letter-spacing: 0.3em;
+        }
+
+        .cosmic-button {
+            position: relative;
+            padding: 1.2rem 2rem;
+            background: transparent;
+            border: 2px solid rgba(176, 180, 187, 0.35);
+            color: #ECE9E2;
+            text-decoration: none;
+            font-weight: 300;
+            text-align: center;
+            border-radius: 15px;
+            transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, filter 200ms ease, opacity 200ms ease;
+            overflow: hidden;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            will-change: transform, filter;
+            font-size: 1rem;
+        }
+
+        .cosmic-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.18) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 200ms ease;
+        }
+
+        .cosmic-button:hover::before { opacity: 1; }
+
+        .cosmic-button:hover {
+            filter: brightness(1.06) contrast(1.03);
+            border-color: #BFA55A;
+            box-shadow:
+                0 0 10px rgba(191,165,90,0.55),
+                0 0 18px rgba(191,165,90,0.35),
+                0 0 26px rgba(191,165,90,0.25),
+                inset 0 2px 0 rgba(236, 233, 226, 0.16);
+            background: linear-gradient(145deg,
+                rgba(236, 233, 226, 0.15),
+                rgba(191, 165, 90, 0.18));
+        }
+
+        /* Contact Section */
+        .contact-constellation {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .site-footer {
+            position: relative;
+            width: min(720px, 92%);
+            margin: 0 auto 3rem;
+            padding: 1rem 1.25rem;
+            color: #ECE9E2;
+            background: linear-gradient(145deg, rgba(60,60,65,0.82), rgba(28,28,32,0.82));
+            border: 1px solid rgba(191, 165, 90, 0.28);
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.28), inset 0 1px 0 rgba(236,233,226,0.12);
+            text-align: center;
+            font-size: 0.85rem;
+            color: #e0e0e0;
+            font-weight: 450;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            letter-spacing: 0.2em;
+        }
+
+        .site-footer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, transparent 60%);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .contact-label {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            letter-spacing: 0.25em;
+            margin-top: 2.5rem;
+            margin-bottom: -1rem;
+        }
+
+        .contact-star {
+            width: 54px;
+            height: 54px;
+            background: linear-gradient(145deg, 
+                rgba(236, 233, 226, 0.1),
+                rgba(74, 38, 115, 0.15));
+            border: 2px solid rgba(236, 233, 226, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: filter 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(236, 233, 226, 0.1);
+            will-change: filter;
+        }
+
+        .contact-star::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(236, 233, 226, 0.18) 0%, transparent 60%);
+            opacity: 0.12;
+            transition: opacity 200ms ease;
+        }
+
+        .contact-star:hover::before { opacity: 1; }
+
+        .contact-star:hover {
+            filter: brightness(1.06) contrast(1.02);
+            border-color: #BFA55A;
+            box-shadow: 
+                0 12px 32px rgba(74, 38, 115, 0.32),
+                inset 0 2px 0 rgba(236, 233, 226, 0.16);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%) translateY(20px);
+            padding: 0.75rem 1rem;
+            color: #ECE9E2;
+            background: linear-gradient(145deg, rgba(60,60,65,0.85), rgba(28,28,32,0.85));
+            border: 1px solid rgba(191,165,90,0.35);
+            border-radius: 12px;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(236,233,226,0.12);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 240ms ease, transform 240ms ease;
+            z-index: 10;
+            letter-spacing: 0.02em;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .contact-star svg {
+            width: 24px;
+            height: 24px;
+            z-index: 1;
+            position: relative;
+        }
+        .contact-star img.contact-icon { width: 24px; height: 24px; z-index: 1; position: relative; display: block; }
+        .contact-star .whatsapp-icon { width: 24px; height: 24px; display: block; background-color: #ECE9E2; transition: background-color 200ms ease; -webkit-mask: url('assets/whatsapp.svg') no-repeat center / contain; mask: url('assets/whatsapp.svg') no-repeat center / contain; }
+
+        /* Overrides to ensure correct hover/glow and toast position */
+        #websiteStar:hover::before { background: radial-gradient(ellipse at center, rgba(217, 79, 70, 0.22) 0%, transparent 60%); }
+        #websiteStar:hover { border-color: #D94F46 !important; box-shadow: 0 0 10px rgba(217,79,70,0.55), 0 0 18px rgba(217,79,70,0.35), 0 0 26px rgba(217,79,70,0.25), inset 0 2px 0 rgba(236, 233, 226, 0.16) !important; }
+        #websiteStar:hover .whatsapp-icon { background-color: #D94F46; }
+
+        #emailStar svg { stroke: #ECE9E2; transition: stroke 200ms ease; }
+        #emailStar:hover svg { stroke: #BFA55A; }
+        #emailStar:hover { border-color: #BFA55A !important; box-shadow: 0 0 10px rgba(191,165,90,0.55), 0 0 18px rgba(191,165,90,0.35), 0 0 26px rgba(191,165,90,0.25), inset 0 2px 0 rgba(236, 233, 226, 0.16) !important; }
+        #emailStar:hover::before { background: radial-gradient(ellipse at center, rgba(191, 165, 90, 0.22) 0%, transparent 60%); }
+
+        .cosmic-button:hover { border-color: #BFA55A !important; box-shadow: 0 0 10px rgba(191,165,90,0.55), 0 0 18px rgba(191,165,90,0.35), 0 0 26px rgba(191,165,90,0.25), inset 0 2px 0 rgba(236, 233, 226, 0.16) !important; background: linear-gradient(145deg, rgba(236, 233, 226, 0.15), rgba(191, 165, 90, 0.18)) !important; }
+
+        .toast { top: 24px !important; bottom: auto !important; transform: translateX(-50%) translateY(-20px) !important; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .identity-sphere {
+                width: 350px;
+                height: 520px;
+            }
+            
+            .glass-card {
+                padding: 1rem;
+            }
+            
+            .contact-constellation { gap: 1rem; }
+            
+            .contact-star { width: 56px; height: 56px; }
+        }
     </style>
-</head>
-<body>
-    <div class="gradient-background">
-        <div class="gradient-sphere sphere-1"></div>
-        <div class="gradient-sphere sphere-2"></div>
-        <div class="gradient-sphere sphere-3"></div>
-        <div class="glow"></div>
-        <div class="grid-overlay"></div>
-        <div class="noise-overlay"></div>
-        <div class="particles-container" id="particles-container"></div>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="gradient-background">
+    <div class="gradient-sphere sphere-1"></div>
+    <div class="gradient-sphere sphere-2"></div>
+    <div class="gradient-sphere sphere-3"></div>
+    <div class="glow"></div>
+    <div class="grid-overlay"></div>
+    <div class="noise-overlay"></div>
+  </div>
+  <canvas id="particleCanvas"></canvas>
+  <div class="universe-container">
+   <div class="identity-sphere">
+    <div class="glass-card">
+     <div class="floating-orb orb-1"></div>
+     <div class="floating-orb orb-2"></div>
+     <div class="floating-orb orb-3"></div>
+     <div class="identity-header">
+      <img src="assets/logo.svg" alt="Zeyad Logo" class="name-logo" id="nameLogo" />
+      <p class="tagline" id="taglineText">ZEYAD.DIGITAL</p>
+     </div>
+     <div class="action-grid">
+      <a href="https://portfolio.zeyad.site" target="_blank" rel="noopener noreferrer" class="cosmic-button" id="portfolioBtn">
+        <span id="portfolioText">VISIT PORTFOLIO</span>
+      </a>
+      <a href="https://store.zeyad.site" target="_blank" rel="noopener noreferrer" class="cosmic-button" id="contactBtn">
+        <span id="contactText">SHOP TEMPLATE STORE</span>
+        <span class="button-subtext">COMING SOON</span>
+      </a>
+     </div>
+     
     </div>
+   </div>
+   <div class="contact-label">CONTACT DETAILS</div>
+  <div class="contact-constellation">
+     <a href="#" class="contact-star" id="emailStar" title="Email">
+       <svg viewbox="0 0 24 24" fill="none" stroke="#BFA55A" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /> <polyline points="22,6 12,13 2,6" />
+       </svg>
+     </a>
+     <a href="https://api.whatsapp.com/send/?phone=60136578683&text=Hi%2C+I+found+your+contact+through+your+website+and+would+like+to+inquire+about+your+services.&type=phone_number&app_absent=0" class="contact-star" id="websiteStar" title="WhatsApp" target="_blank" rel="noopener noreferrer">
+       <span class="contact-icon whatsapp-icon" aria-hidden="true"></span>
+     </a>
+  </div>
+  <footer class="site-footer">© 2025 ZEYAD.DIGITAL</footer>
+  </div>
+  <script>
 
-    <div class="remodel-message">
-        <p>
-            This website is currently being remodelled.<br>
-            If you’re looking for the portfolio, it’s now at
-            <a href="https://portfolio.zeyad.site" target="_blank" rel="noopener noreferrer">https://portfolio.zeyad.site</a>
-        </p>
-    </div>
-
-    <script>
-    // Particle Animation - Optimized for performance
-    function initParticles() {
-        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (isMobile) return;
-
-        const particlesContainer = document.getElementById('particles-container');
-        if (particlesContainer) {
-            const particleCount = 20;
-            for (let i = 0; i < particleCount; i++) createParticle();
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initParticles);
-    } else {
-        initParticles();
-    }
-
-    function createParticle() {
-        const container = document.getElementById('particles-container');
-        if (!container) return;
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        const size = Math.random() * 3 + 1;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        resetParticle(particle);
-        container.appendChild(particle);
-        animateParticle(particle);
-    }
-
-    function resetParticle(particle) {
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        particle.style.left = `${posX}%`;
-        particle.style.top = `${posY}%`;
-        particle.style.opacity = '0';
-        return { x: posX, y: posY };
-    }
-
-    function animateParticle(particle) {
-        const pos = resetParticle(particle);
-        const duration = Math.random() * 10 + 10;
-        const delay = Math.random() * 5;
-        const delayTimeout = setTimeout(() => {
-            particle.style.transition = `all ${duration}s linear`;
-            particle.style.opacity = Math.random() * 0.5 + 0.1;
-            const moveX = pos.x + (Math.random() * 20 - 10);
-            const moveY = pos.y - Math.random() * 30;
-            particle.style.left = `${moveX}%`;
-            particle.style.top = `${moveY}%`;
-            const animationTimeout = setTimeout(() => animateParticle(particle), duration * 1000);
-            if (window.particleTimeouts) window.particleTimeouts.push(animationTimeout);
-        }, delay * 1000);
-        if (window.particleTimeouts) window.particleTimeouts.push(delayTimeout);
-    }
-
-    // Mouse interaction with light parallax
-    let lastMouseMove = 0;
-    const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (!isMobile) {
-        document.addEventListener('mousemove', (e) => {
-            const now = Date.now();
-            if (now - lastMouseMove < 50) return; // throttle
-            lastMouseMove = now;
-            const mouseX = (e.clientX / window.innerWidth) * 100;
-            const mouseY = (e.clientY / window.innerHeight) * 100;
-            if (Math.random() > 0.7) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                const size = Math.random() * 3 + 1;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${mouseX}%`;
-                particle.style.top = `${mouseY}%`;
-                particle.style.opacity = '0.4';
-                const container = document.getElementById('particles-container');
-                if (container) {
-                    container.appendChild(particle);
-                    const mouseTimeout1 = setTimeout(() => {
-                        particle.style.transition = 'all 1s ease-out';
-                        particle.style.left = `${mouseX + (Math.random() * 6 - 3)}%`;
-                        particle.style.top = `${mouseY + (Math.random() * 6 - 3)}%`;
-                        particle.style.opacity = '0';
-                        const mouseTimeout2 = setTimeout(() => particle.remove(), 1000);
-                        if (window.particleTimeouts) window.particleTimeouts.push(mouseTimeout2);
-                    }, 10);
-                    if (window.particleTimeouts) window.particleTimeouts.push(mouseTimeout1);
+        // Particle System
+        class ParticleUniverse {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                this.colors = ['#4A2673', '#BFA55A', '#D94F46', '#ECE9E2'];
+                
+                this.resize();
+                this.createParticles();
+                this.bindEvents();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const particleCount = Math.min(150, Math.floor((this.canvas.width * this.canvas.height) / 8000));
+                
+                for (let i = 0; i < particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        z: Math.random() * 1000,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        vz: (Math.random() - 0.5) * 2,
+                        color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                        size: Math.random() * 3 + 1,
+                        life: Math.random() * 100,
+                        maxLife: 100
+                    });
                 }
             }
+            
+            bindEvents() {
+                window.addEventListener('resize', () => this.resize());
+                
+                document.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+            
+            updateParticles() {
+                this.particles.forEach(particle => {
+                    // Movement
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.z += particle.vz;
+                    
+                    // Mouse attraction
+                    if (!window.__hoveringCard) {
+                        const dx = this.mouse.x - particle.x;
+                        const dy = this.mouse.y - particle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 150) {
+                            const force = (150 - distance) / 150;
+                            particle.vx += dx * force * 0.0001;
+                            particle.vy += dy * force * 0.0001;
+                        }
+                    }
+                    
+                    // Boundaries
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    if (particle.z < 0 || particle.z > 1000) particle.vz *= -1;
+                    
+                    // Keep in bounds
+                    particle.x = Math.max(0, Math.min(this.canvas.width, particle.x));
+                    particle.y = Math.max(0, Math.min(this.canvas.height, particle.y));
+                    particle.z = Math.max(0, Math.min(1000, particle.z));
+                    
+                    // Life cycle
+                    particle.life += 0.5;
+                    if (particle.life > particle.maxLife) {
+                        particle.life = 0;
+                        particle.x = Math.random() * this.canvas.width;
+                        particle.y = Math.random() * this.canvas.height;
+                    }
+                });
+            }
+            
+            drawParticles() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(particle => {
+                    const scale = 1 - (particle.z / 1000);
+                    const size = particle.size * scale;
+                    const alpha = (1 - particle.life / particle.maxLife) * scale;
+                    
+                    this.ctx.save();
+                    this.ctx.globalAlpha = alpha * 0.8;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = particle.color;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                });
+                
+                // Draw connections
+                this.drawConnections();
+            }
+            
+            drawConnections() {
+                this.particles.forEach((particle, i) => {
+                    this.particles.slice(i + 1).forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            const alpha = (100 - distance) / 100 * 0.1;
+                            
+                            this.ctx.save();
+                            this.ctx.globalAlpha = alpha;
+                            this.ctx.strokeStyle = '#BFA55A';
+                            this.ctx.lineWidth = 1;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(otherParticle.x, otherParticle.y);
+                            this.ctx.stroke();
+                            this.ctx.restore();
+                        }
+                    });
+                });
+            }
+            
+            animate() {
+                this.updateParticles();
+                this.drawParticles();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Initialize particle system
+        const universe = new ParticleUniverse();
 
-            const moveX = (e.clientX / window.innerWidth - 0.5) * 5;
-            const moveY = (e.clientY / window.innerHeight - 0.5) * 5;
-            const spheres = document.querySelectorAll('.gradient-sphere');
-            spheres.forEach((sphere, index) => {
-                const multiplier = (index + 1) * 0.2;
-                sphere.style.transform = `translate(${moveX * multiplier}px, ${moveY * multiplier}px)`;
+        // Parallax interaction for gradient spheres (remembered background)
+        let lastMouseMove = 0;
+        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                const now = Date.now();
+                if (now - lastMouseMove < 50) return;
+                lastMouseMove = now;
+                const moveX = (e.clientX / window.innerWidth - 0.5) * 5;
+                const moveY = (e.clientY / window.innerHeight - 0.5) * 5;
+                const spheres = document.querySelectorAll('.gradient-sphere');
+                spheres.forEach((sphere, index) => {
+                    const multiplier = (index + 1) * 0.2;
+                    sphere.style.transform = `translate(${moveX * multiplier}px, ${moveY * multiplier}px)`;
+                });
             });
-        });
-    }
-    </script>
-</body>
-</html>
+        }
 
+        // Card hover enters once, holds state, exits once
+        (function(){
+            const card = document.querySelector('.glass-card');
+            const sphere = document.querySelector('.identity-sphere');
+            const emailStar = document.getElementById('emailStar');
+            const websiteStar = document.getElementById('websiteStar');
+            if (!card) return;
+            let leavingTimer = null;
+            card.addEventListener('mouseenter', () => {
+                card.classList.remove('is-leaving');
+                card.classList.add('is-hovered');
+                if (sphere) sphere.classList.add('hover-stable');
+                window.__hoveringCard = true;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('is-hovered');
+                card.classList.add('is-leaving');
+                if (sphere) sphere.classList.remove('hover-stable');
+                window.__hoveringCard = false;
+                if (leavingTimer) clearTimeout(leavingTimer);
+                leavingTimer = setTimeout(() => card.classList.remove('is-leaving'), 450);
+            });
+
+            // Email copy to clipboard + toast
+            function showToast(msg) {
+                let toast = document.querySelector('.toast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.className = 'toast';
+                    document.body.appendChild(toast);
+                }
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            if (emailStar) {
+                emailStar.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    try {
+                        await navigator.clipboard.writeText('hello@zeyad.site');
+                        showToast('Email has been successfully copied to clipboard!');
+                    } catch (err) {
+                        showToast('Failed to copy email to clipboard');
+                    }
+                });
+            }
+
+            if (websiteStar) {
+                websiteStar.setAttribute('title', 'WhatsApp');
+            }
+        })();
+
+        // Removed unused element SDK block during cleanup
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ee3d8d8574919b',t:'MTc2MzIwNDM4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
